@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Freipen · 加密写作空间（多工作区）</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 启动 / 连接检查 -->
+      <div id="splash" class="splash">
+        <div class="splash-inner">
+          <div class="splash-logo" id="splash-logo"></div>
+          <p id="splash-text">正在连接加密服务…</p>
+          <button id="splash-retry" class="btn hidden">重试</button>
+        </div>
+      </div>
+
+      <!-- 门禁：工作区选择 / 首次创建 / 解锁 -->
+      <section id="gate" class="gate hidden">
+        <form id="gate-form" class="gate-card" novalidate>
+          <div class="gate-logo" id="gate-logo"></div>
+          <h1>Freipen</h1>
+          <p class="gate-sub" id="gate-sub"></p>
+
+          <div class="gate-ws-row hidden" id="gate-ws-row"></div>
+
+          <label class="gate-field hidden" id="gate-name-row">
+            <span class="gate-label">工作区名称</span>
+            <input id="gate-name" type="text" placeholder="我的工作区" spellcheck="false" maxlength="60" />
+          </label>
+
+          <label class="gate-field">
+            <span class="gate-label">主密钥</span>
+            <input id="gate-pw" type="password" autocomplete="new-password" spellcheck="false" />
+          </label>
+          <label class="gate-field hidden" id="gate-pw2-row">
+            <span class="gate-label">再次输入主密钥</span>
+            <input id="gate-pw2" type="password" autocomplete="new-password" spellcheck="false" />
+          </label>
+
+          <div id="gate-strength" class="gate-strength hidden"></div>
+          <div id="gate-error" class="gate-error" role="alert"></div>
+
+          <button type="submit" id="gate-submit" class="btn btn-primary btn-block"></button>
+
+          <div class="gate-meta">
+            <span id="gate-meta-line"></span>
+          </div>
+        </form>
+        <p class="gate-footnote" id="gate-footnote"></p>
+      </section>
+
+      <!-- 主工作区 -->
+      <section id="workspace" class="workspace hidden">
+        <aside class="sidebar">
+          <div class="side-brand">
+            <span class="brand-logo" id="brand-logo"></span>
+            <span class="brand-name">Freipen</span>
+            <span class="brand-ws hidden" id="brand-ws" title="当前工作区"></span>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="btn-daily" title="左键：今日日记 · 右键：日历视图"></button>
+            <button class="icon-btn" id="btn-lock" title="锁定并切换工作区（Ctrl+Shift+L）"></button>
+            <button class="icon-btn" id="btn-side-toggle" title="折叠侧边栏"></button>
+          </div>
+
+          <div class="side-rail hidden" id="side-rail">
+            <button class="rail-btn" id="rail-open" title="展开侧边栏"></button>
+            <button class="rail-btn" id="rail-daily" title="左键：今日日记 · 右键：日历视图"></button>
+            <button class="rail-btn" id="rail-settings" title="设置"></button>
+            <button class="rail-btn" id="rail-lock" title="锁定工作区"></button>
+          </div>
+
+          <div class="side-search">
+            <span class="search-ic" id="search-ic"></span>
+            <input id="search-input" type="search" placeholder="搜索笔记…" spellcheck="false" />
+          </div>
+
+          <div class="side-actions">
+            <button class="icon-btn" id="btn-sort" title="排序方式"></button>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="btn-new-note" title="新建笔记（Ctrl+N）"></button>
+            <button class="icon-btn" id="btn-new-folder" title="新建文件夹"></button>
+          </div>
+
+          <nav class="tree-wrap" id="tree-wrap" aria-label="文件列表"></nav>
+
+          <div class="side-foot">
+            <span class="spacer"></span>
+            <button class="icon-btn" id="btn-settings" title="设置"></button>
+            <button class="icon-btn" id="btn-change-key" title="更改主密钥"></button>
+          </div>
+        </aside>
+
+        <main class="main">
+          <header class="topbar" id="topbar">
+            <div class="doc-head" id="doc-head"></div>
+            <div class="doc-actions">
+              <span class="save-state" id="save-state"></span>
+              <div class="mode-switch" role="group" aria-label="编辑模式" title="切换编辑模式（Ctrl+E）">
+                <button type="button" class="mode-btn active" data-mode="wysiwyg" title="即时渲染（所见即所得）">实时</button>
+                <button type="button" class="mode-btn" data-mode="source" title="Markdown 源码">源码</button>
+              </div>
+            </div>
+          </header>
+
+          <div class="editor-scroll" id="editor-scroll">
+            <div class="editor-host" id="editor-host" hidden></div>
+            <textarea
+              id="source-area"
+              class="source-area hidden"
+              spellcheck="false"
+              placeholder="Markdown 源码编辑模式…（Ctrl+E 切回即时渲染）"
+            ></textarea>
+            <div class="empty-state" id="empty-state">
+              <div class="empty-icon" id="empty-icon"></div>
+              <h2>还没有打开任何笔记</h2>
+              <p>选择左侧的一篇笔记，或新建一篇开始写作。</p>
+              <button class="btn btn-primary" id="btn-empty-new">新建笔记</button>
+            </div>
+          </div>
+
+          <footer class="statusbar">
+            <span id="stat-left">就绪</span>
+            <span class="spacer"></span>
+            <span id="stat-right"></span>
+          </footer>
+        </main>
+      </section>
+    </div>
+
+    <div id="modal-root"></div>
+    <div id="toast-root"></div>
+  </body>
+</html>

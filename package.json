@@ -1,0 +1,32 @@
+{
+  "name": "freipen",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Freipen - 本地加密 Markdown 所见即所得写作应用（Obsidian 风格）",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "start": "node server.js",
+    "test": "node test/e2e.test.mjs",
+    "test:e2e": "node test/e2e.test.mjs",
+    "test:smoke": "node test/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "dependencies": {
+    "@milkdown/core": "^7.22.1",
+    "@milkdown/plugin-clipboard": "^7.22.1",
+    "@milkdown/plugin-history": "^7.22.1",
+    "@milkdown/plugin-listener": "^7.22.1",
+    "@milkdown/plugin-math": "^7.5.9",
+    "@milkdown/plugin-prism": "^7.22.1",
+    "@milkdown/preset-commonmark": "^7.22.1",
+    "@milkdown/preset-gfm": "^7.22.1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.62.1",
+    "vite": "^8.2.2"
+  }
+}
